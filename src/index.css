@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-flow-950: #04040d;
+  --color-flow-900: #060610;
+  --color-flow-800: #0c0c1e;
+  --color-flow-700: #12122e;
+  --color-flow-600: #1a1a40;
+
+  --color-focus-500: #f97316;
+  --color-focus-400: #fb923c;
+  --color-focus-300: #fdba74;
+
+  --color-break-500: #6366f1;
+  --color-break-400: #818cf8;
+  --color-break-300: #a5b4fc;
+
+  --color-long-500: #10b981;
+  --color-long-400: #34d399;
+  --color-long-300: #6ee7b7;
+
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body, #root {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: #060610;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Glass card */
+.glass {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Glow variants */
+.glow-focus  { box-shadow: 0 0 24px rgba(249,115,22,0.12); }
+.glow-break  { box-shadow: 0 0 24px rgba(99,102,241,0.12); }
+.glow-long   { box-shadow: 0 0 24px rgba(16,185,129,0.12); }
+
+/* Ambient blobs */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+/* Timer ring transition */
+.ring-transition { transition: stroke-dashoffset 0.5s linear; }
