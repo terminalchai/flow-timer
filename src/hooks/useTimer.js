@@ -51,6 +51,20 @@ function playBell(mode) {
   } catch {}
 }
 
+// ─── Browser notification helper ────────────────────────────────────────────
+function notify(title, body) {
+  try {
+    if (!('Notification' in window)) return
+    if (Notification.permission === 'granted') {
+      new Notification(title, { body, icon: '/favicon.svg', silent: true })
+    } else if (Notification.permission === 'default') {
+      Notification.requestPermission().then(p => {
+        if (p === 'granted') new Notification(title, { body, icon: '/favicon.svg', silent: true })
+      })
+    }
+  } catch {}
+}
+
 // ─── Hook ─────────────────────────────────────────────────────────────────
 export default function useTimer({ settings, onSessionComplete }) {
   const [mode,        setMode]        = useState(MODES.FOCUS)
@@ -99,18 +113,28 @@ export default function useTimer({ settings, onSessionComplete }) {
 
       const isLongBreak = newCount % settings.longBreakInterval === 0
       const nextMode = isLongBreak ? MODES.LONG_BREAK : MODES.SHORT_BREAK
+      const breakLabel = isLongBreak ? 'Long Break' : 'Short Break'
+      notify('Time for a break! ☕', `Focus session complete — ${breakLabel} starting${settings.autoStartBreak ? ' now' : ' when you\'re ready'}.`)
       setMode(nextMode)
       setSecondsLeft(getDuration(nextMode))
       setRunning(settings.autoStartBreak)
     } else {
       onSessionComplete?.({ mode, duration: (mode === MODES.SHORT_BREAK ? settings.shortBreakDuration : settings.longBreakDuration) * 60 * 1000, completedAt: Date.now() })
+      notify('Back to work! 🎯', `Break's over — Focus session starting${settings.autoStartFocus ? ' now' : ' when you\'re ready'}.`)
       setMode(MODES.FOCUS)
       setSecondsLeft(getDuration(MODES.FOCUS))
       setRunning(settings.autoStartFocus)
     }
   }
 
-  const start  = useCallback(() => { startedAtRef.current = Date.now(); setRunning(true) }, [])
+  const start  = useCallback(() => {
+    // request notification permission on first start
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission()
+    }
+    startedAtRef.current = Date.now()
+    setRunning(true)
+  }, [])
   const pause  = useCallback(() => setRunning(false), [])
   const reset  = useCallback(() => { setRunning(false); setSecondsLeft(getDuration(mode)) }, [getDuration, mode])
   const skip   = useCallback(() => { setRunning(false); handleSessionEnd() }, [mode, sessionsCompleted, settings])
