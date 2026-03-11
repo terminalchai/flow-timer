@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 
 const KEYS = {
   settings: 'flowtimer-settings',
@@ -43,12 +43,22 @@ export function useSettings() {
     })
   }, [])
 
+  // ensure LS key exists on first mount
+  useEffect(() => {
+    if (!localStorage.getItem(KEYS.settings)) save(KEYS.settings, settings)
+  }, []) // eslint-disable-line
+
   return { settings, updateSettings }
 }
 
 // ─── Sessions ─────────────────────────────────────────────────────────────
 export function useSessions() {
-  const [sessions, setSessionsState] = useState(() => load(KEYS.sessions, []))
+  const [sessions, setSessionsState] = useState(() => {
+    const stored = load(KEYS.sessions, [])
+    // ensure key exists in LS on first mount
+    if (!localStorage.getItem(KEYS.sessions)) save(KEYS.sessions, [])
+    return stored
+  })
 
   const addSession = useCallback((session) => {
     setSessionsState(prev => {

@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 
 export const MODES = {
-  FOCUS:       'focus',
-  SHORT_BREAK: 'short',
-  LONG_BREAK:  'long',
+  FOCUS:       'FOCUS',
+  SHORT_BREAK: 'SHORT_BREAK',
+  LONG_BREAK:  'LONG_BREAK',
 }
 
 const MODE_LABELS = {
@@ -95,7 +95,7 @@ export default function useTimer({ settings, onSessionComplete }) {
     if (mode === MODES.FOCUS) {
       const newCount = sessionsCompleted + 1
       setSessionsCompleted(newCount)
-      onSessionComplete?.({ mode: MODES.FOCUS, duration: settings.focusDuration, completedAt: Date.now() })
+      onSessionComplete?.({ mode: MODES.FOCUS, duration: settings.focusDuration * 60 * 1000, completedAt: Date.now() })
 
       const isLongBreak = newCount % settings.longBreakInterval === 0
       const nextMode = isLongBreak ? MODES.LONG_BREAK : MODES.SHORT_BREAK
@@ -103,7 +103,7 @@ export default function useTimer({ settings, onSessionComplete }) {
       setSecondsLeft(getDuration(nextMode))
       setRunning(settings.autoStartBreak)
     } else {
-      onSessionComplete?.({ mode, duration: mode === MODES.SHORT_BREAK ? settings.shortBreakDuration : settings.longBreakDuration, completedAt: Date.now() })
+      onSessionComplete?.({ mode, duration: (mode === MODES.SHORT_BREAK ? settings.shortBreakDuration : settings.longBreakDuration) * 60 * 1000, completedAt: Date.now() })
       setMode(MODES.FOCUS)
       setSecondsLeft(getDuration(MODES.FOCUS))
       setRunning(settings.autoStartFocus)

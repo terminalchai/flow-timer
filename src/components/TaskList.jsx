@@ -39,7 +39,7 @@ export default function TaskList({ tasks, onAdd, onToggle, onDelete, onClearDone
           className="flex-1 bg-white/5 border border-white/8 rounded-xl px-3 py-2 text-sm text-white placeholder-white/25 outline-none focus:border-orange-500/50 transition-colors"
         />
         <button onClick={submit} disabled={!input.trim()}
-          className="w-9 h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer disabled:opacity-30"
+          className="w-11 h-11 rounded-xl flex items-center justify-center transition-all cursor-pointer disabled:opacity-30"
           style={{ background: 'rgba(249,115,22,0.2)', color: '#fb923c' }}>
           <Plus size={15} />
         </button>
@@ -54,7 +54,7 @@ export default function TaskList({ tasks, onAdd, onToggle, onDelete, onClearDone
               animate={{ opacity: 1, height: 'auto' }}
               exit={{    opacity: 0, height: 0 }}
               className="flex items-center gap-2 group">
-              <button onClick={() => onToggle(task.id)} className="flex-shrink-0 cursor-pointer text-white/25 hover:text-white/70 transition-colors">
+              <button onClick={() => onToggle(task.id)} className="w-11 h-11 flex items-center justify-center flex-shrink-0 cursor-pointer text-white/25 hover:text-white/70 transition-colors">
                 {task.done
                   ? <CheckCircle2 size={16} style={{ color: '#34d399' }} />
                   : <Circle size={16} />}
@@ -63,7 +63,7 @@ export default function TaskList({ tasks, onAdd, onToggle, onDelete, onClearDone
                 {task.text}
               </span>
               <button onClick={() => onDelete(task.id)}
-                className="opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-white/25 hover:text-red-400">
+                className="w-11 h-11 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-white/25 hover:text-red-400">
                 <X size={13} />
               </button>
             </motion.div>

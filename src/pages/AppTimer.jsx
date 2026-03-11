@@ -32,11 +32,11 @@ export default function AppTimer() {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [toast, setToast] = useState(null)
 
-  const { settings, saveSettings } = useSettings()
+  const { settings, updateSettings: saveSettings } = useSettings()
   const { sessions, addSession }   = useSessions()
   const { tasks, addTask, toggleTask, deleteTask, clearDone } = useTasks()
 
-  const handleSessionComplete = useCallback((mode, duration) => {
+  const handleSessionComplete = useCallback(({ mode, duration }) => {
     addSession({ mode, duration, ts: Date.now() })
     setToast({
       message: mode === 'FOCUS'
@@ -74,12 +74,12 @@ export default function AppTimer() {
         </div>
         <div className="flex items-center gap-2">
           <button onClick={() => navigate('/')}
-            className="p-2 rounded-xl glass text-white/40 hover:text-white/80 transition-colors cursor-pointer">
-            <Home size={15} />
+            className="w-11 h-11 flex items-center justify-center rounded-xl glass text-white/40 hover:text-white/80 transition-colors cursor-pointer">
+            <Home size={17} />
           </button>
           <button onClick={() => setSettingsOpen(true)}
-            className="p-2 rounded-xl glass text-white/40 hover:text-white/80 transition-colors cursor-pointer">
-            <Settings size={15} />
+            className="w-11 h-11 flex items-center justify-center rounded-xl glass text-white/40 hover:text-white/80 transition-colors cursor-pointer">
+            <Settings size={17} />
           </button>
         </div>
       </nav>
@@ -107,17 +107,17 @@ export default function AppTimer() {
 
             {/* controls */}
             <div className="flex items-center gap-3">
-              <button onClick={reset}
-                className="w-10 h-10 rounded-xl glass flex items-center justify-center text-white/40 hover:text-white/80 transition-colors cursor-pointer">
+              <button data-testid="timer-reset" onClick={reset}
+                className="w-11 h-11 rounded-xl glass flex items-center justify-center text-white/40 hover:text-white/80 transition-colors cursor-pointer">
                 <RotateCcw size={15} />
               </button>
-              <button onClick={running ? pause : start}
+              <button data-testid="timer-play" onClick={running ? pause : start}
                 className="w-16 h-16 rounded-2xl flex items-center justify-center text-white transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-lg"
                 style={{ background: 'linear-gradient(135deg, #f97316, #ea580c)', boxShadow: '0 0 30px rgba(249,115,22,0.35)' }}>
                 {running ? <Pause size={22} fill="white" /> : <Play size={22} fill="white" className="ml-0.5" />}
               </button>
-              <button onClick={skip}
-                className="w-10 h-10 rounded-xl glass flex items-center justify-center text-white/40 hover:text-white/80 transition-colors cursor-pointer">
+              <button data-testid="timer-skip" onClick={skip}
+                className="w-11 h-11 rounded-xl glass flex items-center justify-center text-white/40 hover:text-white/80 transition-colors cursor-pointer">
                 <SkipForward size={15} />
               </button>
             </div>
